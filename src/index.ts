@@ -43,7 +43,7 @@ app.get("/", (req, res) => {
 app.use(morgan("dev"));
 
 // Routes
-app.use("/api", userRoutes); // Mount your user routes
+app.use("/api", userRoutes);
 
 // Start server
 app.listen(PORT, () => {

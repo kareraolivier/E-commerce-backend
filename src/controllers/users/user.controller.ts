@@ -1,5 +1,3 @@
-// src/controllers/users/user.controller.ts
-
 import { Request, Response } from "express";
 import { getAllUsers } from "../../services/users/user.service"; // Import the service function
 

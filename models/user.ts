@@ -30,7 +30,7 @@ export const initializeUserModel = (sequelize: Sequelize) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true, // Optionally, you can enforce uniqueness for email
+        unique: true,
       },
     },
     {
