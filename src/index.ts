@@ -21,7 +21,7 @@ sequelize
 app.use(express.json({ limit: "5mb" }));
 
 // Home route
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   res.status(200).json({
     status: "success",
     message: "Welcome to E-commerce app 🔥",
