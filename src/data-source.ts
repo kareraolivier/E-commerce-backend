@@ -1,7 +1,8 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
-import { User } from "./entity/User";
+// @ts-ignore
+import { User } from "../models/user.js";
 
 dotenv.config();
 
