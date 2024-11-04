@@ -1,5 +1,5 @@
 import { AppDataSource } from "./data-source";
-import { User } from "./entity/User";
+import { User } from "../models/user";
 
 AppDataSource.initialize()
   .then(async () => {
@@ -7,7 +7,7 @@ AppDataSource.initialize()
     const user = new User();
     user.firstName = "Timber";
     user.lastName = "Saw";
-    user.age = 25;
+
     await AppDataSource.manager.save(user);
     console.log("Saved a new user with id: " + user.id);
 
