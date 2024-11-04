@@ -1,23 +1,51 @@
+import express from "express";
 import { AppDataSource } from "./data-source";
-// @ts-ignore
-import { User } from "../models/user.js";
+import { sequelize } from "./sequelize";
+import userRoutes from "./routes/user";
+import { initializeUserModel } from "../models/user";
+import morgan from "morgan";
+const app = express();
+const PORT = process.env.PORT || 3000;
 
+// Initialize TypeORM
 AppDataSource.initialize()
-  .then(async () => {
-    console.log("Inserting a new user into the database...");
-    const user = new User();
-    user.firstName = "Timber";
-    user.lastName = "Saw";
-
-    await AppDataSource.manager.save(user);
-    console.log("Saved a new user with id: " + user.id);
-
-    console.log("Loading users from the database...");
-    const users = await AppDataSource.manager.find(User);
-    console.log("Loaded users: ", users);
-
-    console.log(
-      "Here you can setup and run express / fastify / any other framework."
-    );
+  .then(() => {
+    console.log("TypeORM connected to the database");
+    // You can also run migrations here if needed
   })
-  .catch((error) => console.error(error));
+  .catch((error) => {
+    console.error("Error initializing TypeORM:", error);
+  });
+
+// Initialize Sequelize and models
+initializeUserModel(sequelize);
+sequelize
+  .sync()
+  .then(() => {
+    console.log("Sequelize connected to the database");
+  })
+  .catch((error) => {
+    console.error("Unable to connect to the database with Sequelize:", error);
+  });
+
+// Middleware
+app.use(express.json({ limit: "5mb" }));
+
+// Home route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Welcome to E-commerce app 🔥",
+  });
+});
+
+// Logging with morgan
+app.use(morgan("dev"));
+
+// Routes
+app.use("/api", userRoutes); // Mount your user routes
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT} 🔥`);
+});

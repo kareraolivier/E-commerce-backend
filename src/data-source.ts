@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
 // @ts-ignore
-import { User } from "../models/user.js";
+import { User } from "../models/user";
 
 dotenv.config();
 
@@ -16,10 +16,9 @@ export const AppDataSource = new DataSource({
   username: DB_USERNAME,
   password: DB_PASSWORD,
   database: DB_DATABASE,
-
-  synchronize: NODE_ENV === "dev" ? false : false,
-  logging: NODE_ENV === "dev" ? false : false,
+  synchronize: NODE_ENV === "dev",
+  logging: NODE_ENV === "dev",
   entities: [User],
-  migrations: [__dirname + "/migration/*.ts"],
+  migrations: [__dirname + "/migrations/*.js"],
   subscribers: [],
 });
