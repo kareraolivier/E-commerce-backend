@@ -22,7 +22,12 @@ export class UserService {
   }
 
   async createUser(userData: Partial<User>): Promise<any> {
-    // Implement createUser logic using userRepository
+    try {
+      return await this.userRepository.createUser(userData);
+    } catch (error) {
+      console.error("Error in createUser:", error);
+      throw error;
+    }
   }
 
   async updateUser(id: number, userData: Partial<User>): Promise<any> {
