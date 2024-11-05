@@ -15,11 +15,11 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
 
 export const createUser = async (
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
+  // next: NextFunction
 ): Promise<void> => {
   try {
-    await validateDTO(CreateUserDTO)(req, res, next);
+    // await validateDTO(CreateUserDTO)(req, res, next);
     const userData: any = req.body;
     const newUser = await userService.createUser(userData);
     res.status(201).json(newUser);

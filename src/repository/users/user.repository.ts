@@ -11,6 +11,7 @@ export class UserRepository {
   async fetchAllUsers(): Promise<User[]> {
     try {
       const [results] = await this.sequelize.query("SELECT * FROM users");
+
       return results as User[];
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -18,16 +19,16 @@ export class UserRepository {
     }
   }
 
-  createUser = async (userData: Partial<User>): Promise<User | null> => {
+  createUser = async (userData: Partial<User>): Promise<any> => {
     try {
       const [result] = await this.sequelize.query(
         `INSERT INTO users (firstName, lastName, email) VALUES (:firstName, :lastName, :email) RETURNING *`,
         {
           replacements: userData,
-          type: (Sequelize as any).QueryTypes.INSERT,
+          type: QueryTypes.INSERT,
         }
       );
-      return result ? (result[0] as User) : null;
+      return result ? result : null;
     } catch (error) {
       console.error("Error creating user:", error);
       throw error;
