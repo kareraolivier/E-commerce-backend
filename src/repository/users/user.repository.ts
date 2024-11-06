@@ -43,7 +43,7 @@ export class UserRepository {
   async fetchUserByEmail(email: string): Promise<any> {
     try {
       const result = await this.sequelize.query(
-        'SELECT "id", "firstName", "lastName", "email", "createdAt", "updatedAt", "isActive" FROM "Users" WHERE "email" = :email',
+        'SELECT * FROM "Users" WHERE "email" = :email',
         {
           replacements: { email },
           type: QueryTypes.SELECT,
