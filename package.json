@@ -30,7 +30,8 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.37.5",
     "sequelize-typescript": "^2.1.6",
-    "typeorm": "0.3.20"
+    "typeorm": "0.3.20",
+    "uuid": "^11.0.2"
   },
   "scripts": {
     "watch": "tsc -w",
