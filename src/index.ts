@@ -10,10 +10,17 @@ const app = express();
 
 const PORT = process.env.PORT || 8000;
 
-// console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-
 // Initialize Sequelize and models
 initializeUserModel(sequelize);
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Database connection established successfully.");
+  })
+  .catch((error) => {
+    console.error("Unable to connect to the database:", error);
+  });
+
 sequelize
   .sync()
   .then(() => {

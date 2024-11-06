@@ -19,6 +19,11 @@ export class User extends Model {
 export const initializeUserModel = (sequelize: Sequelize) => {
   User.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -36,7 +41,10 @@ export const initializeUserModel = (sequelize: Sequelize) => {
     {
       sequelize,
       modelName: "User",
-      tableName: "users",
+      tableName: "Users",
+      timestamps: true,
+      createdAt: "createdAt",
+      updatedAt: "updatedAt",
     }
   );
 

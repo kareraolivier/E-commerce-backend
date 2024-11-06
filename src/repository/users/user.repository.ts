@@ -10,7 +10,9 @@ export class UserRepository {
 
   async fetchAllUsers(): Promise<User[]> {
     try {
-      const [results] = await this.sequelize.query("SELECT * FROM users");
+      const results = await this.sequelize.query('SELECT * FROM "Users"', {
+        type: QueryTypes.SELECT,
+      });
 
       return results as User[];
     } catch (error) {
@@ -19,19 +21,26 @@ export class UserRepository {
     }
   }
 
-  createUser = async (userData: Partial<User>): Promise<any> => {
+  async createUser(userData: Partial<User>): Promise<any> {
+    const { firstName, lastName, email } = userData;
     try {
-      const [result] = await this.sequelize.query(
-        `INSERT INTO users (firstName, lastName, email) VALUES (:firstName, :lastName, :email) RETURNING *`,
+      const result = await this.sequelize.query(
+        `INSERT INTO "Users" ("firstName", "lastName", "email", "createdAt", "updatedAt") VALUES (:firstName, :lastName, :email, :createdAt, :updatedAt) RETURNING *`,
         {
-          replacements: userData,
+          replacements: {
+            firstName,
+            lastName,
+            email,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
           type: QueryTypes.INSERT,
         }
       );
-      return result ? result : null;
+      return result || null;
     } catch (error) {
       console.error("Error creating user:", error);
       throw error;
     }
-  };
+  }
 }
