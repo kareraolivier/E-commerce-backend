@@ -13,5 +13,6 @@ export const sequelize = new Sequelize(
     host: DB_HOST,
     port: parseInt(DB_PORT || "5432"),
     dialect: "postgres",
+    logging: false,
   }
 );

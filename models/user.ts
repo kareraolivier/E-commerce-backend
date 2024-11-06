@@ -42,6 +42,11 @@ export const initializeUserModel = (sequelize: Sequelize) => {
         allowNull: false,
         unique: false,
       },
+      isActive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
     },
     {
       sequelize,

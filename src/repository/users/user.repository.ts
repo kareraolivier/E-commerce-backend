@@ -11,7 +11,7 @@ export class UserRepository {
   async fetchAllUsers(): Promise<User[]> {
     try {
       const results = await this.sequelize.query(
-        'SELECT id, "firstName", "lastName", email, "createdAt", "updatedAt" FROM "Users"',
+        'SELECT id, "firstName", "lastName", email, "createdAt", "updatedAt", "isActive" FROM "Users"',
         {
           type: QueryTypes.SELECT,
         }
