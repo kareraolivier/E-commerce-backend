@@ -10,9 +10,12 @@ export class UserRepository {
 
   async fetchAllUsers(): Promise<User[]> {
     try {
-      const results = await this.sequelize.query('SELECT * FROM "Users"', {
-        type: QueryTypes.SELECT,
-      });
+      const results = await this.sequelize.query(
+        'SELECT id, "firstName", "lastName", email, "createdAt", "updatedAt" FROM "Users"',
+        {
+          type: QueryTypes.SELECT,
+        }
+      );
 
       return results as User[];
     } catch (error) {

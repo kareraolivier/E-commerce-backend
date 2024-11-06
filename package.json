@@ -40,7 +40,8 @@
     "build": "tsc",
     "start": "ts-node src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migrate": "npx sequelize-cli db:migrate --config ./config/config.js",
+    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:down": "npx sequelize-cli db:migrate:undo",
     "migration": " npm run typeorm migration:run -- -d ./src/data-source.ts",
     "seed": "npx sequelize-cli db:seed:all"
   }
