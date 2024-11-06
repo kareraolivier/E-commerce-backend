@@ -1,5 +1,9 @@
 import { User } from "../../../models/user";
-import { ValidationError, ConflictError } from "../../errors/AppErrors";
+import {
+  ValidationError,
+  ConflictError,
+  InternalServerError,
+} from "../../errors/AppErrors";
 import { UserRepository } from "../../repository/users/user.repository";
 import { sequelize } from "../../sequelize";
 import bcrypt from "bcrypt";
@@ -19,7 +23,7 @@ export class UserService {
       return await this.userRepository.fetchAllUsers();
     } catch (error) {
       console.error("Error in getAllUsers:", error);
-      throw error;
+      throw new InternalServerError("Error in getAllUsers:");
     }
   }
 
@@ -28,7 +32,7 @@ export class UserService {
       return await this.userRepository.fetchUserById(id);
     } catch (error) {
       console.error("Error in getUserById:", error);
-      throw error;
+      throw new InternalServerError("Error in getUserById:");
     }
   }
 
@@ -55,7 +59,7 @@ export class UserService {
       return await this.userRepository.createUser(user);
     } catch (error) {
       console.error("Error in createUser:", error);
-      throw error;
+      throw new InternalServerError("Error in createUser:");
     }
   }
 
@@ -64,7 +68,7 @@ export class UserService {
       return await this.userRepository.updateUser(id, userData);
     } catch (error) {
       console.error("Error in updateUser:", error);
-      throw error;
+      throw new InternalServerError("Error in updateUser:");
     }
   }
 
@@ -73,7 +77,7 @@ export class UserService {
       return await this.userRepository.deleteUser(id);
     } catch (error) {
       console.error("Error in deleteUser:", error);
-      throw error;
+      throw new InternalServerError("Error in deleteUser:");
     }
   }
 }
