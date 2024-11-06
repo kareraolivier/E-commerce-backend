@@ -1,6 +1,8 @@
 import { User } from "../../../models/user";
+import { ValidationError, ConflictError } from "../../errors/AppErrors";
 import { UserRepository } from "../../repository/users/user.repository";
 import { sequelize } from "../../sequelize";
+import bcrypt from "bcrypt";
 
 // Create an instance of UserRepository
 const userRepository = new UserRepository(sequelize);
@@ -21,21 +23,58 @@ export class UserService {
     }
   }
 
-  async createUser(userData: Partial<User>): Promise<any> {
+  async getUserById(id: string): Promise<User | null> {
     try {
-      return await this.userRepository.createUser(userData);
+      return await this.userRepository.fetchUserById(id);
+    } catch (error) {
+      console.error("Error in getUserById:", error);
+      throw error;
+    }
+  }
+
+  async createUser(userData: Partial<User>): Promise<User> {
+    try {
+      if (!userData.email) {
+        throw new ValidationError("Email is required");
+      }
+
+      const existingUser = await this.userRepository.fetchUserByEmail(
+        userData.email
+      );
+      if (existingUser) {
+        throw new ConflictError("User with this email already exists");
+      }
+
+      if (!userData.password) {
+        throw new ValidationError("Password is required");
+      }
+      const user = {
+        ...userData,
+        password: await bcrypt.hash(userData.password, 10),
+      };
+      return await this.userRepository.createUser(user);
     } catch (error) {
       console.error("Error in createUser:", error);
       throw error;
     }
   }
 
-  async updateUser(id: number, userData: Partial<User>): Promise<any> {
-    // Implement updateUser logic using userRepository
+  async updateUser(id: string, userData: Partial<User>): Promise<any> {
+    try {
+      return await this.userRepository.updateUser(id, userData);
+    } catch (error) {
+      console.error("Error in updateUser:", error);
+      throw error;
+    }
   }
 
-  async deleteUser(id: number): Promise<void> {
-    // Implement deleteUser logic using userRepository
+  async deleteUser(id: string): Promise<void> {
+    try {
+      return await this.userRepository.deleteUser(id);
+    } catch (error) {
+      console.error("Error in deleteUser:", error);
+      throw error;
+    }
   }
 }
 

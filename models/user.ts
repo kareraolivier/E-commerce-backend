@@ -4,6 +4,8 @@ export class User extends Model {
   public firstName!: string;
   public lastName!: string;
   public email!: string;
+  public password?: string;
+  public isActive?: boolean;
 
   /**
    * Helper method for defining associations.

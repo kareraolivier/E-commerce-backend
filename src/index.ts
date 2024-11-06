@@ -4,6 +4,7 @@ import { initializeUserModel } from "../models/user";
 import morgan from "morgan";
 import Router from "./routes";
 import dotenv from "dotenv";
+import { errorHandler } from "./middlewares/errorHandler";
 
 dotenv.config();
 const app = express();
@@ -30,9 +31,13 @@ sequelize
     console.error("Unable to connect to the database with Sequelize:", error);
   });
 
+// Logging with morgan
+app.use(morgan("dev"));
+
 // Middleware
 app.use(express.json({ limit: "5mb" }));
 
+// Routes
 app.use("/api/", Router);
 
 // Home route
@@ -43,8 +48,8 @@ app.get("/", (_, res) => {
   });
 });
 
-// Logging with morgan
-app.use(morgan("dev"));
+// Error handling middleware
+app.use(errorHandler);
 
 // Routes
 
