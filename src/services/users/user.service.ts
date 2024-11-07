@@ -1,9 +1,5 @@
 import { User } from "../../../models/user";
-import {
-  ValidationError,
-  ConflictError,
-  InternalServerError,
-} from "../../errors/AppErrors";
+import { ValidationError, ConflictError } from "../../errors/AppErrors";
 import { UserRepository } from "../../repository/users/user.repository";
 import { sequelize } from "../../sequelize";
 import bcrypt from "bcrypt";
@@ -23,7 +19,7 @@ export class UserService {
       return await this.userRepository.fetchAllUsers();
     } catch (error) {
       console.error("Error in getAllUsers:", error);
-      throw new InternalServerError("Error in getAllUsers:");
+      throw error;
     }
   }
 
@@ -32,7 +28,7 @@ export class UserService {
       return await this.userRepository.fetchUserById(id);
     } catch (error) {
       console.error("Error in getUserById:", error);
-      throw new InternalServerError("Error in getUserById:");
+      throw error;
     }
   }
 
@@ -46,6 +42,7 @@ export class UserService {
         userData.email
       );
       if (existingUser) {
+        console.log("existing user", existingUser);
         throw new ConflictError("User with this email already exists");
       }
 
@@ -59,7 +56,7 @@ export class UserService {
       return await this.userRepository.createUser(user);
     } catch (error) {
       console.error("Error in createUser:", error);
-      throw new InternalServerError("Error in createUser:");
+      throw error;
     }
   }
 
@@ -68,7 +65,7 @@ export class UserService {
       return await this.userRepository.updateUser(id, userData);
     } catch (error) {
       console.error("Error in updateUser:", error);
-      throw new InternalServerError("Error in updateUser:");
+      throw error;
     }
   }
 
@@ -77,7 +74,7 @@ export class UserService {
       return await this.userRepository.deleteUser(id);
     } catch (error) {
       console.error("Error in deleteUser:", error);
-      throw new InternalServerError("Error in deleteUser:");
+      throw error;
     }
   }
 }

@@ -11,8 +11,8 @@ export const errorHandler: any = (
 ) => {
   if (error.customError) {
     console.error("Custom error:", error);
-    return res.status(error.statusCode).json({ message: error.message });
+    throw res.status(error.statusCode).json({ message: error.message });
   }
   console.error("Unexpected error:", error);
-  res.status(500).json({ message: "Internal Server Error" });
+  res.status(500).json({ message: "Internal Server Error: " + error });
 };
