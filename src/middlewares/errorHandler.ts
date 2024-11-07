@@ -10,6 +10,7 @@ export const errorHandler: any = (
   next: NextFunction
 ) => {
   if (error.customError) {
+    console.error("Custom error:", error);
     return res.status(error.statusCode).json({ message: error.message });
   }
   console.error("Unexpected error:", error);
