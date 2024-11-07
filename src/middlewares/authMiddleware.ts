@@ -1,24 +1,28 @@
 import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import { UnauthorizedError } from "../errors/AppErrors";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 
 type CustomRequest = Request & {
   userId: string;
 };
-
-const jwt = require("jsonwebtoken");
-function verifyToken(req: CustomRequest, res: Response, next: NextFunction) {
-  const token = req.header("Authorization");
-  if (!token) throw new UnauthorizedError("Access denied. No token provided.");
+const { JWT_SECRET } = process.env;
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+  const customReq = req as CustomRequest;
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.user.id;
+    const authHeader = req.header("Authorization");
+    if (!authHeader)
+      throw new UnauthorizedError("Access denied. No token provided.");
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, JWT_SECRET as string) as any;
+    customReq.userId = decoded.loggedInUser.id;
     next();
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });
   }
-}
+};
 
-module.exports = verifyToken;
+export default verifyToken;

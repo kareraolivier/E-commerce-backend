@@ -35,7 +35,14 @@ export class UserAuthService {
       if (!user.isActive) {
         throw new UnauthorizedError("User is not active");
       }
-      const token = jwt.sign({ ...user }, JWT_SECRET, {
+
+      const loggedInUser = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      };
+      const token = jwt.sign(loggedInUser, JWT_SECRET, {
         expiresIn: "1d",
       });
       return token;
