@@ -14,3 +14,16 @@ export const login = async (
     next(error);
   }
 };
+
+export const getLoggedInUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const user = await userAuthService.getLoggedInUser(req);
+    res.status(200).json({ user });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -7,11 +7,19 @@ import {
 import { UserRepository } from "../repository/users/user.repository";
 import { sequelize } from "../sequelize";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 
 dotenv.config();
 
+interface DecodedToken extends JwtPayload {
+  loggedInUser: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
 // Create an instance of UserRepository
 const userRepository = new UserRepository(sequelize);
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
@@ -52,13 +60,21 @@ export class UserAuthService {
     }
   }
 
-  async getLogedInUser(req: any): Promise<any> {
-    const token = req.header("Authorization");
-    if (!token)
-      throw new UnauthorizedError("Access denied. No token provided.");
+  async getLoggedInUser(req: any): Promise<DecodedToken["loggedInUser"]> {
     try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      return decoded;
+      const authHeader = req.header("Authorization");
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        throw new UnauthorizedError("Access denied. No token provided.");
+      }
+
+      const token = authHeader.split(" ")[1];
+      const decoded = jwt.verify(token, JWT_SECRET as string) as DecodedToken;
+
+      if (!decoded.loggedInUser) {
+        throw new UnauthorizedError("Invalid token structure.");
+      }
+
+      return decoded.loggedInUser;
     } catch (error) {
       throw new UnauthorizedError("Access denied. Invalid token.");
     }
