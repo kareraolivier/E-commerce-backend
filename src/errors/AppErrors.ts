@@ -33,12 +33,6 @@ export class UnauthorizedError extends AppError {
   }
 }
 
-export class InternalServerError extends AppError {
-  constructor(message: string) {
-    super(message, 500);
-  }
-}
-
 export class ForbiddenError extends AppError {
   constructor(message: string) {
     super(message, 403);
