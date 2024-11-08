@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { Model } from "sequelize";
+import { Model, Sequelize, DataTypes } from "sequelize";
 
 export class Category extends Model {
   public id!: string;
@@ -14,7 +14,7 @@ export class Category extends Model {
    * This method is not a part of Sequelize lifecycle.
    * The `models/index` file will call this method automatically.
    */
-  static associate(models) {
+  static associate(models: any) {
     Category.belongsToMany(models.Product, {
       through: "ProductCategory",
       as: "products",
@@ -22,7 +22,7 @@ export class Category extends Model {
   }
 }
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
   Category.init(
     {
       id: {

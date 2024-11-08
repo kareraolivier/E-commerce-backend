@@ -6,7 +6,8 @@ import verifyToken from "../middlewares/authMiddleware";
 const router = Router();
 
 // Register all routes
-router.use("/users", verifyToken, userRoutes);
 router.use("/auth", AuthRoutes);
+router.use("/users", verifyToken, userRoutes);
+router.use("/categories", verifyToken, userRoutes);
 
 export default router;
