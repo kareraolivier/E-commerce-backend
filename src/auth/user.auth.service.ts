@@ -59,7 +59,7 @@ export class UserAuthService {
     }
   }
 
-  async getLoggedInUser(req: any): Promise<DecodedToken["loggedInUser"]> {
+  async getLoggedInUser(req: any): Promise<DecodedToken> {
     try {
       const authHeader = req.header("Authorization");
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -68,12 +68,12 @@ export class UserAuthService {
 
       const token = authHeader.split(" ")[1];
       const decoded = jwt.verify(token, JWT_SECRET as string) as DecodedToken;
-
-      if (!decoded.loggedInUser) {
+      console.log("first", decoded);
+      if (!decoded) {
         throw new UnauthorizedError("Invalid token structure.");
       }
 
-      return decoded.loggedInUser;
+      return decoded;
     } catch (error) {
       throw new UnauthorizedError("Access denied. Invalid token.");
     }
