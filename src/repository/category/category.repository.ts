@@ -47,6 +47,8 @@ export class CategoryRepository {
         replacements: {
           id,
           ...categoryData,
+          isActive: true,
+          isDeleted: false,
         },
         type: QueryTypes.INSERT,
       }

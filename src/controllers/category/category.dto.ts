@@ -4,14 +4,16 @@ export class CreateCategoryDTO {
   @IsString()
   @IsNotEmpty()
   name!: string;
-  @IsBoolean()
+  @IsString()
   @IsNotEmpty()
-  isActive!: boolean;
+  description!: string;
 }
 
 export class UpdateCategoryDTO {
   @IsString()
   name?: string;
+  @IsString()
+  description?: string;
   @IsBoolean()
   isActive?: boolean;
 }
