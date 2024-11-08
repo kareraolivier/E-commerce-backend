@@ -1,6 +1,7 @@
 import { User } from "../../../models/user";
 import { Sequelize, QueryTypes } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
+import { updateRecord } from "../../helpers/update.query";
 export class UserRepository {
   private sequelize: Sequelize;
 
@@ -11,7 +12,7 @@ export class UserRepository {
   async fetchAllUsers(): Promise<User[]> {
     try {
       const results = await this.sequelize.query(
-        'SELECT "id", "firstName", "lastName", "email", "createdAt", "updatedAt", "isActive" FROM "Users"',
+        'SELECT "id", "firstName", "lastName", "email", "createdAt", "updatedAt", "isActive" FROM "Users" ORDER BY id desc',
         {
           type: QueryTypes.SELECT,
         }
@@ -83,19 +84,7 @@ export class UserRepository {
   }
 
   async updateUser(id: string, userData: Partial<User>): Promise<any> {
-    try {
-      const result = await this.sequelize.query(
-        'UPDATE "Users" SET "firstName" = :firstName, "lastName" = :lastName, "email" = :email, "updatedAt" = :updatedAt WHERE "id" = :id RETURNING *',
-        {
-          replacements: { ...userData, id },
-          type: QueryTypes.UPDATE,
-        }
-      );
-      return result[0] || null;
-    } catch (error) {
-      console.error("Error updating user:", error);
-      throw error;
-    }
+    return await updateRecord<User>(this.sequelize, "Users", id, userData);
   }
 
   async deleteUser(id: string): Promise<void> {
