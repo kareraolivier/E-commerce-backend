@@ -1,6 +1,10 @@
 import db from "../../../models";
 import { User } from "../../../models/user";
-import { ValidationError, ConflictError } from "../../errors/AppErrors";
+import {
+  ValidationError,
+  ConflictError,
+  NotFoundError,
+} from "../../errors/AppErrors";
 import { UserRepository } from "../../repository/users/user.repository";
 import bcrypt from "bcrypt";
 
@@ -25,7 +29,11 @@ export class UserService {
 
   async getUserById(id: string): Promise<User | null> {
     try {
-      return await this.userRepository.fetchUserById(id);
+      const user = await this.userRepository.fetchUserById(id);
+      if (!user) {
+        throw new NotFoundError("User not found");
+      }
+      return user;
     } catch (error) {
       console.error("Error in getUserById:", error);
       throw error;
