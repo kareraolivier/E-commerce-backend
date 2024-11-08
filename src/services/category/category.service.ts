@@ -32,7 +32,7 @@ class CategoryService {
       id,
       categoryData
     );
-    return category;
+    return category as Partial<Category>;
   }
   async deleteCategory(id: string): Promise<void> {
     await this.categoryRepository.deleteCategory(id);

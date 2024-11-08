@@ -5,6 +5,7 @@ import {
   IsString,
   Length,
   Matches,
+  IsOptional,
 } from "class-validator";
 
 export class CreateUserDTO {
@@ -32,19 +33,24 @@ export class CreateUserDTO {
 export class UpdateUserDTO {
   @IsString()
   @Length(2, 30)
+  @IsOptional()
   firstName?: string;
 
   @IsString()
   @Length(2, 30)
+  @IsOptional()
   lastName?: string;
 
   @IsEmail()
+  @IsOptional()
   email?: string;
 
   @IsString()
   @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,30}$/)
+  @IsOptional()
   password?: string;
 
   @IsBoolean()
+  @IsOptional()
   isActive?: boolean;
 }

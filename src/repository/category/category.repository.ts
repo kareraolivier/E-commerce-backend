@@ -1,6 +1,7 @@
 import { Category } from "../../../models/category";
 import { Sequelize, QueryTypes } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
+import { updateRecord } from "../../helpers/update.query";
 
 export class CategoryRepository {
   private sequelize: Sequelize;
@@ -42,13 +43,15 @@ export class CategoryRepository {
   async createCategory(categoryData: Partial<Category>): Promise<Category> {
     const id = uuidv4();
     const result = await this.sequelize.query(
-      'INSERT INTO "Categories" ("id", "name", "description", "isDeleted", "isActive") VALUES (:id, :name, :description, :isDeleted, :isActive) RETURNING *',
+      'INSERT INTO "Categories" ("id", "name", "description", "isDeleted", "isActive", "createdAt", "updatedAt") VALUES (:id, :name, :description, :isDeleted, :isActive, :createdAt, :updatedAt) RETURNING *',
       {
         replacements: {
           id,
           ...categoryData,
           isActive: true,
           isDeleted: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         type: QueryTypes.INSERT,
       }
@@ -56,22 +59,31 @@ export class CategoryRepository {
     return result[0] as unknown as Category;
   }
 
-  async updateCategory(
-    id: string,
-    categoryData: Partial<Category>
-  ): Promise<Partial<Category>> {
-    const result = await this.sequelize.query(
-      'UPDATE "Categories" SET "name" = :name, "description" = :description, "isDeleted" = :isDeleted, "isActive" = :isActive WHERE "id" = :id RETURNING *',
-      {
-        replacements: {
-          ...categoryData,
-          id,
-        },
-        type: QueryTypes.UPDATE,
-      }
+  async updateCategory(id: string, categoryData: Partial<Category>) {
+    return await updateRecord<Category>(
+      this.sequelize,
+      "Categories",
+      id,
+      categoryData
     );
-    return result[0] as unknown as Category;
   }
+
+  //   async updateCategory(
+  //     id: string,
+  //     categoryData: Partial<Category>
+  //   ): Promise<Partial<Category>> {
+  //     const result = await this.sequelize.query(
+  //       'UPDATE "Categories" SET "name" = :name, "description" = :description, "isDeleted" = :isDeleted, "isActive" = :isActive WHERE "id" = :id RETURNING *',
+  //       {
+  //         replacements: {
+  //           ...categoryData,
+  //           id,
+  //         },
+  //         type: QueryTypes.UPDATE,
+  //       }
+  //     );
+  //     return result[0] as unknown as Category;
+  //   }
 
   async deleteCategory(id: string): Promise<void> {
     await this.sequelize.query('DELETE FROM "Categories" WHERE "id" = :id', {
