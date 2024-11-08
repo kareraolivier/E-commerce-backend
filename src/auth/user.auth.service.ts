@@ -1,7 +1,7 @@
 import {
   ValidationError,
-  InternalServerError,
   UnauthorizedError,
+  NotFoundError,
 } from "../errors/AppErrors";
 import { UserRepository } from "../repository/users/user.repository";
 import { sequelize } from "../sequelize";
@@ -33,7 +33,7 @@ export class UserAuthService {
     try {
       const user = await this.userRepository.fetchUserByEmail(email);
       if (!user) {
-        throw new ValidationError("Invalid email or password");
+        throw new NotFoundError("Invalid email or password");
       }
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (!isPasswordMatch) {
@@ -55,11 +55,11 @@ export class UserAuthService {
       return token;
     } catch (error) {
       console.error("Error in login:", error);
-      throw new InternalServerError("Error in login:");
+      throw error;
     }
   }
 
-  async getLoggedInUser(req: any): Promise<DecodedToken["loggedInUser"]> {
+  async getLoggedInUser(req: any): Promise<DecodedToken> {
     try {
       const authHeader = req.header("Authorization");
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -68,12 +68,12 @@ export class UserAuthService {
 
       const token = authHeader.split(" ")[1];
       const decoded = jwt.verify(token, JWT_SECRET as string) as DecodedToken;
-
-      if (!decoded.loggedInUser) {
+      console.log("first", decoded);
+      if (!decoded) {
         throw new UnauthorizedError("Invalid token structure.");
       }
 
-      return decoded.loggedInUser;
+      return decoded;
     } catch (error) {
       throw new UnauthorizedError("Access denied. Invalid token.");
     }
