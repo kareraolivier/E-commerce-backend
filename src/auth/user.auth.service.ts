@@ -4,10 +4,10 @@ import {
   NotFoundError,
 } from "../errors/AppErrors";
 import { UserRepository } from "../repository/users/user.repository";
-import { sequelize } from "../sequelize";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
+import db from "../../models";
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ interface DecodedToken extends JwtPayload {
   };
 }
 // Create an instance of UserRepository
-const userRepository = new UserRepository(sequelize);
+const userRepository = new UserRepository(db.sequelize);
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
 export class UserAuthService {
   private userRepository: UserRepository;

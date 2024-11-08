@@ -1,11 +1,11 @@
+import db from "../../../models";
 import { User } from "../../../models/user";
 import { ValidationError, ConflictError } from "../../errors/AppErrors";
 import { UserRepository } from "../../repository/users/user.repository";
-import { sequelize } from "../../sequelize";
 import bcrypt from "bcrypt";
 
 // Create an instance of UserRepository
-const userRepository = new UserRepository(sequelize);
+const userRepository = new UserRepository(db.sequelize);
 
 export class UserService {
   private userRepository: UserRepository;
