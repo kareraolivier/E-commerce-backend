@@ -1,5 +1,6 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
+
 export class User extends Model {
   public firstName!: string;
   public lastName!: string;
@@ -13,12 +14,12 @@ export class User extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models: any) {
-    // Define association here
+    User.hasOne(models.Address, { foreignKey: "userId", as: "address" });
+    User.hasMany(models.Review, { foreignKey: "userId", as: "reviews" });
   }
 }
-
-// Initialize the User model
-export const initializeUserModel = (sequelize: Sequelize) => {
+module.exports = (sequelize: Sequelize) => {
+  // Initialize the User model
   User.init(
     {
       id: {

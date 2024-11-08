@@ -1,8 +1,9 @@
 .idea/
-.vscode/
 node_modules/
 build/
+temp_auto_push.bat
 tmp/
 temp/
 .env
-*.env
+*.env.gitignore
+branch_structure.json

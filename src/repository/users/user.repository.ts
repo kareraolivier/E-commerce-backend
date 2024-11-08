@@ -60,7 +60,7 @@ export class UserRepository {
     const { firstName, lastName, email, password } = userData;
     try {
       const result = await this.sequelize.query(
-        `INSERT INTO "Users" ("id", "firstName", "lastName", "email", "password", "isActive", "createdAt", "updatedAt") VALUES (:id, :firstName, :lastName, :email, :password, :isActive, :createdAt, :updatedAt) RETURNING *`,
+        `INSERT INTO "Users" ("id", "firstName", "lastName", "email", "password", "isActive", "createdAt", "updatedAt") VALUES (:id, :firstName, :lastName, :email, :password, :isActive, :createdAt, :updatedAt) RETURNING "id", "firstName", "lastName", "email", "isActive", "createdAt", "updatedAt"`,
         {
           replacements: {
             id: uuidv4(),
