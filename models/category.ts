@@ -4,6 +4,7 @@ import { Model, Sequelize, DataTypes } from "sequelize";
 export class Category extends Model {
   public id!: string;
   public name!: string;
+  public imageUrl!: string;
   public description!: string;
   public isDeleted!: boolean;
   public isActive!: string;
@@ -31,6 +32,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         primaryKey: true,
       },
       name: DataTypes.STRING,
+      imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       description: DataTypes.STRING,
       isDeleted: DataTypes.BOOLEAN,
       isActive: DataTypes.STRING,

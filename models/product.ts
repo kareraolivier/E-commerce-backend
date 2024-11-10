@@ -4,6 +4,7 @@ import { Model, Sequelize } from "sequelize";
 export class Product extends Model {
   public id!: string;
   public title!: string;
+  public imageUrl!: string;
   public description!: string;
   public price!: string;
   public categoryId!: string;
@@ -34,6 +35,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         primaryKey: true,
       },
       title: DataTypes.STRING,
+      imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       description: DataTypes.STRING,
       price: DataTypes.STRING,
       categoryId: DataTypes.STRING,
