@@ -6,6 +6,7 @@ export class User extends Model {
   public lastName!: string;
   public email!: string;
   public password?: string;
+  public imageUrl?: string;
   public isActive?: boolean;
 
   /**
@@ -44,6 +45,10 @@ module.exports = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: false,
+      },
+      imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       isActive: {
         type: DataTypes.BOOLEAN,

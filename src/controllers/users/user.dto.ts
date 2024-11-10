@@ -28,6 +28,10 @@ export class CreateUserDTO {
   // Password should have at least one lowercase letter, one uppercase letter, one digit, and be at least 6 characters long
   @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,30}$/)
   password!: string;
+
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
 }
 
 export class UpdateUserDTO {
@@ -49,6 +53,10 @@ export class UpdateUserDTO {
   @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,30}$/)
   @IsOptional()
   password?: string;
+
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
 
   @IsBoolean()
   @IsOptional()
