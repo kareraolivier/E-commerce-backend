@@ -7,6 +7,7 @@ import {
 } from "../../errors/AppErrors";
 import { UserRepository } from "../../repository/users/user.repository";
 import bcrypt from "bcrypt";
+import { IUser } from "./user";
 
 // Create an instance of UserRepository
 const userRepository = new UserRepository(db.sequelize);
@@ -40,21 +41,13 @@ export class UserService {
     }
   }
 
-  async createUser(userData: Partial<User>): Promise<User> {
+  async createUser(userData: IUser): Promise<User> {
     try {
-      if (!userData.email) {
-        throw new ValidationError("Email is required");
-      }
-
       const existingUser = await this.userRepository.fetchUserByEmail(
         userData.email
       );
       if (existingUser) {
         throw new ConflictError("User with this email already exists");
-      }
-
-      if (!userData.password) {
-        throw new ValidationError("Password is required");
       }
       const user = {
         ...userData,
@@ -69,6 +62,10 @@ export class UserService {
 
   async updateUser(id: string, userData: Partial<User>): Promise<any> {
     try {
+      const user = await this.userRepository.fetchUserById(id);
+      if (!user) {
+        throw new NotFoundError("User not found");
+      }
       return await this.userRepository.updateUser(id, userData);
     } catch (error) {
       console.error("Error in updateUser:", error);

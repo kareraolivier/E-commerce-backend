@@ -5,6 +5,9 @@ export class CreateCategoryDTO {
   @IsNotEmpty()
   name!: string;
   @IsString()
+  @IsOptional()
+  imageUrl?: string;
+  @IsString()
   @IsNotEmpty()
   description!: string;
 }
@@ -13,6 +16,9 @@ export class UpdateCategoryDTO {
   @IsString()
   @IsOptional()
   name?: string;
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
   @IsString()
   @IsOptional()
   description?: string;

@@ -31,7 +31,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         defaultValue: uuidv4,
         primaryKey: true,
       },
-      name: DataTypes.STRING,
+      name: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
       imageUrl: {
         type: DataTypes.STRING,
         allowNull: true,

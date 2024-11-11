@@ -1,7 +1,9 @@
 import db from "../../../models";
 import { Category } from "../../../models/category";
+import { ConflictError } from "../../errors/AppErrors";
 import { CategoryRepository } from "../../repository/category/category.repository";
 import { v4 as uuidv4 } from "uuid";
+import { ICategory } from "./category";
 
 class CategoryService {
   private categoryRepository: CategoryRepository;
@@ -20,7 +22,13 @@ class CategoryService {
     const category = await this.categoryRepository.fetchCategoryByName(name);
     return category;
   }
-  async createCategory(categoryData: Partial<Category>): Promise<Category> {
+  async createCategory(categoryData: ICategory): Promise<Category> {
+    const categoryName = await this.categoryRepository.fetchCategoryByName(
+      categoryData.name
+    );
+    if (categoryName) {
+      throw new ConflictError("Category already exists");
+    }
     const category = await this.categoryRepository.createCategory(categoryData);
     return category;
   }
