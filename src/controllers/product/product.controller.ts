@@ -36,7 +36,6 @@ export const createProduct = async (
   try {
     const productData: any = req.body;
     productData.imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-    console.log("first", productData);
     const product = await productService.createProduct(productData);
     res.status(201).json(product);
   } catch (error) {
