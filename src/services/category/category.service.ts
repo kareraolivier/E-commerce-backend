@@ -2,7 +2,6 @@ import db from "../../../models";
 import { Category } from "../../../models/category";
 import { ConflictError, NotFoundError } from "../../errors/AppErrors";
 import { CategoryRepository } from "../../repository/category/category.repository";
-import { v4 as uuidv4 } from "uuid";
 import { ICategory } from "./category";
 
 class CategoryService {
@@ -23,8 +22,8 @@ class CategoryService {
   }
   async getCategoryByName(name: string): Promise<Category> {
     const category = await this.categoryRepository.fetchCategoryByName(name);
-    if (!category) {
-      throw new NotFoundError("Category not found");
+    if (category) {
+      throw new ConflictError("Category already exists");
     }
     return category;
   }

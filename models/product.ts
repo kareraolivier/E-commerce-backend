@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { Model, Sequelize } from "sequelize";
+import { Category } from "./category";
 
 export class Product extends Model {
   public id!: string;
@@ -8,6 +9,7 @@ export class Product extends Model {
   public description!: string;
   public price!: string;
   public categoryId!: string;
+  public category?: Category;
   public isDeleted!: boolean;
   public isAvailable!: string;
   /**
@@ -15,7 +17,7 @@ export class Product extends Model {
    * This method is not a part of Sequelize lifecycle.
    * The `models/index` file will call this method automatically.
    */
-  static associate(models) {
+  static associate(models: any) {
     Product.belongsToMany(models.Category, {
       through: "ProductCategory",
       as: "categories",

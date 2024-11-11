@@ -57,7 +57,7 @@ export class UserRepository {
     }
   }
 
-  async createUser(userData: Partial<User>): Promise<any> {
+  async createUser(userData: Partial<User>): Promise<User> {
     const { firstName, lastName, email, password } = userData;
     try {
       const result = await this.sequelize.query(
@@ -76,15 +76,21 @@ export class UserRepository {
           type: QueryTypes.INSERT,
         }
       );
-      return result || null;
+      return result[0] as unknown as User;
     } catch (error) {
       console.error("Error creating user:", error);
       throw error;
     }
   }
 
-  async updateUser(id: string, userData: Partial<User>): Promise<any> {
-    return await updateRecord<User>(this.sequelize, "Users", id, userData);
+  async updateUser(id: string, userData: Partial<User>): Promise<User> {
+    const user = await updateRecord<User>(
+      this.sequelize,
+      "Users",
+      id,
+      userData
+    );
+    return user as unknown as User;
   }
 
   async deleteUser(id: string): Promise<void> {
