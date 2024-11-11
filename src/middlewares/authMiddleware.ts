@@ -18,7 +18,6 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, JWT_SECRET as string) as any;
-    console.log("first", decoded);
     customReq.userId = decoded.id;
     next();
   } catch (error) {

@@ -68,7 +68,6 @@ export class UserAuthService {
 
       const token = authHeader.split(" ")[1];
       const decoded = jwt.verify(token, JWT_SECRET as string) as DecodedToken;
-      console.log("first", decoded);
       if (!decoded) {
         throw new UnauthorizedError("Invalid token structure.");
       }

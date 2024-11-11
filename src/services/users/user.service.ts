@@ -50,7 +50,6 @@ export class UserService {
         userData.email
       );
       if (existingUser) {
-        console.log("existing user", existingUser);
         throw new ConflictError("User with this email already exists");
       }
 

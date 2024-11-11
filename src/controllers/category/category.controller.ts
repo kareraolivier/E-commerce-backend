@@ -35,6 +35,7 @@ export const createCategory = async (
 ): Promise<void> => {
   try {
     const categoryData: any = req.body;
+    categoryData.imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
     const category = await categoryService.createCategory(categoryData);
     res.status(201).json(category);
   } catch (error) {

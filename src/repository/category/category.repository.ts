@@ -43,7 +43,7 @@ export class CategoryRepository {
   async createCategory(categoryData: Partial<Category>): Promise<Category> {
     const id = uuidv4();
     const result = await this.sequelize.query(
-      'INSERT INTO "Categories" ("id", "name", "description", "isDeleted", "isActive", "createdAt", "updatedAt") VALUES (:id, :name, :description, :isDeleted, :isActive, :createdAt, :updatedAt) RETURNING *',
+      'INSERT INTO "Categories" ("id", "name", "description", "imageUrl", "isDeleted", "isActive", "createdAt", "updatedAt") VALUES (:id, :name, :description, :imageUrl, :isDeleted, :isActive, :createdAt, :updatedAt) RETURNING *',
       {
         replacements: {
           id,
@@ -67,23 +67,6 @@ export class CategoryRepository {
       categoryData
     );
   }
-
-  //   async updateCategory(
-  //     id: string,
-  //     categoryData: Partial<Category>
-  //   ): Promise<Partial<Category>> {
-  //     const result = await this.sequelize.query(
-  //       'UPDATE "Categories" SET "name" = :name, "description" = :description, "isDeleted" = :isDeleted, "isActive" = :isActive WHERE "id" = :id RETURNING *',
-  //       {
-  //         replacements: {
-  //           ...categoryData,
-  //           id,
-  //         },
-  //         type: QueryTypes.UPDATE,
-  //       }
-  //     );
-  //     return result[0] as unknown as Category;
-  //   }
 
   async deleteCategory(id: string): Promise<void> {
     await this.sequelize.query('DELETE FROM "Categories" WHERE "id" = :id', {

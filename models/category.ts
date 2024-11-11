@@ -4,8 +4,8 @@ import { Model, Sequelize, DataTypes } from "sequelize";
 export class Category extends Model {
   public id!: string;
   public name!: string;
-  public imageUrl!: string;
   public description!: string;
+  public imageUrl?: string | null;
   public isDeleted!: boolean;
   public isActive!: string;
 
