@@ -1,6 +1,6 @@
 import db from "../../../models";
 import { Category } from "../../../models/category";
-import { ConflictError } from "../../errors/AppErrors";
+import { ConflictError, NotFoundError } from "../../errors/AppErrors";
 import { CategoryRepository } from "../../repository/category/category.repository";
 import { v4 as uuidv4 } from "uuid";
 import { ICategory } from "./category";
@@ -16,19 +16,20 @@ class CategoryService {
   }
   async getCategoryById(id: string): Promise<Category> {
     const category = await this.categoryRepository.fetchCategoryById(id);
+    if (!category) {
+      throw new NotFoundError("Category not found");
+    }
     return category;
   }
   async getCategoryByName(name: string): Promise<Category> {
     const category = await this.categoryRepository.fetchCategoryByName(name);
+    if (!category) {
+      throw new NotFoundError("Category not found");
+    }
     return category;
   }
   async createCategory(categoryData: ICategory): Promise<Category> {
-    const categoryName = await this.categoryRepository.fetchCategoryByName(
-      categoryData.name
-    );
-    if (categoryName) {
-      throw new ConflictError("Category already exists");
-    }
+    await this.getCategoryByName(categoryData.name);
     const category = await this.categoryRepository.createCategory(categoryData);
     return category;
   }
@@ -36,6 +37,7 @@ class CategoryService {
     id: string,
     categoryData: Partial<Category>
   ): Promise<Partial<Category>> {
+    await this.getCategoryById(id);
     const category = await this.categoryRepository.updateCategory(
       id,
       categoryData
@@ -43,6 +45,7 @@ class CategoryService {
     return category as Partial<Category>;
   }
   async deleteCategory(id: string): Promise<void> {
+    await this.getCategoryById(id);
     await this.categoryRepository.deleteCategory(id);
   }
 }

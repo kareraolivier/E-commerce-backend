@@ -62,10 +62,7 @@ export class UserService {
 
   async updateUser(id: string, userData: Partial<User>): Promise<any> {
     try {
-      const user = await this.userRepository.fetchUserById(id);
-      if (!user) {
-        throw new NotFoundError("User not found");
-      }
+      await this.getUserById(id);
       return await this.userRepository.updateUser(id, userData);
     } catch (error) {
       console.error("Error in updateUser:", error);
@@ -75,6 +72,7 @@ export class UserService {
 
   async deleteUser(id: string): Promise<void> {
     try {
+      await this.getUserById(id);
       return await this.userRepository.deleteUser(id);
     } catch (error) {
       console.error("Error in deleteUser:", error);
