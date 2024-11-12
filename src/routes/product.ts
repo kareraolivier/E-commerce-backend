@@ -13,20 +13,21 @@ import {
 } from "../controllers/product/product.dto";
 import { validateDTO } from "../middlewares/validation.middleware";
 import { upload } from "../middlewares/upload.image";
+import { isUuidValid } from "../middlewares/isUuidValid";
 
 const router = Router();
 
 router.get("/", getAllProducts);
 router.get("/category/:id", getProductsByCategory);
-router.get("/:id", getProductById);
+router.get("/:id", isUuidValid, getProductById);
 router.post(
   "/",
   upload.single("imageUrl"),
   validateDTO(createProductDto),
   createProduct
 );
-router.patch("/:id", validateDTO(updateProductDto), updateProduct);
-router.patch("/soft-delete/:id", updateProduct);
-router.delete("/:id", deleteProduct);
+router.patch("/:id", isUuidValid, validateDTO(updateProductDto), updateProduct);
+router.patch("/soft-delete/:id", isUuidValid, updateProduct);
+router.delete("/:id", isUuidValid, deleteProduct);
 
 export default router;

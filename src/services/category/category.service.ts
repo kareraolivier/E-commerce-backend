@@ -14,11 +14,15 @@ class CategoryService {
     return categories;
   }
   async getCategoryById(id: string): Promise<Category> {
-    const category = await this.categoryRepository.fetchCategoryById(id);
-    if (!category) {
-      throw new NotFoundError("Category not found");
+    try {
+      const category = await this.categoryRepository.fetchCategoryById(id);
+      if (!category) {
+        throw new NotFoundError("Category not found");
+      }
+      return category;
+    } catch (error) {
+      throw error;
     }
-    return category;
   }
   async getCategoryByName(name: string): Promise<Category> {
     const category = await this.categoryRepository.fetchCategoryByName(name);

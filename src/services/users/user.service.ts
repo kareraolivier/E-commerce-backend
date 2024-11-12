@@ -28,7 +28,7 @@ export class UserService {
     }
   }
 
-  async getUserById(id: string): Promise<User | null> {
+  async getUserById(id: string): Promise<User> {
     try {
       const user = await this.userRepository.fetchUserById(id);
       if (!user) {

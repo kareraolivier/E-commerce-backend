@@ -18,7 +18,7 @@ export class CategoryRepository {
     return categories as Category[];
   }
 
-  async fetchCategoryById(id: string): Promise<Category> {
+  async fetchCategoryById(id: string): Promise<Category | null> {
     const category = await this.sequelize.query(
       'SELECT * FROM "Categories" WHERE "id" = :id',
       {
@@ -26,7 +26,8 @@ export class CategoryRepository {
         type: QueryTypes.SELECT,
       }
     );
-    return category[0] as Category;
+
+    return (category[0] as Category) || null;
   }
 
   async fetchCategoryByName(name: string): Promise<Category> {

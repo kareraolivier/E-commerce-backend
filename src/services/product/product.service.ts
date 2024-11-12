@@ -1,7 +1,7 @@
 import db from "../../../models";
-import { Product } from "../../../models/product";
-import { ConflictError, NotFoundError } from "../../errors/AppErrors";
+import { NotFoundError } from "../../errors/AppErrors";
 import { ProductRepository } from "../../repository/product/product.repository";
+import { categoryService } from "../category/category.service";
 import { IProduct } from "./product";
 
 export class ProductService {
@@ -28,7 +28,8 @@ export class ProductService {
     return products;
   }
 
-  async createProduct(productData: Partial<IProduct>): Promise<IProduct> {
+  async createProduct(productData: IProduct): Promise<IProduct> {
+    await categoryService.getCategoryById(productData.categoryId);
     const product = await this.productRepository.createProduct(productData);
     return product;
   }
