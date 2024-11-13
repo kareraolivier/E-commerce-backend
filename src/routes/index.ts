@@ -10,7 +10,7 @@ const router = Router();
 // Register all routes
 router.use("/auth", AuthRoutes);
 router.use("/users", verifyToken, userRoutes);
-router.use("/categories", verifyToken, categoryRoutes);
-router.use("/products", verifyToken, productRoutes);
+router.use("/categories", categoryRoutes);
+router.use("/products", productRoutes);
 
 export default router;

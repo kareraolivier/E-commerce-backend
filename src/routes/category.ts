@@ -13,23 +13,26 @@ import {
 import { validateDTO } from "../middlewares/validation.middleware";
 import { upload } from "../middlewares/upload.image";
 import { isUuidValid } from "../middlewares/isUuidValid";
+import verifyToken from "../middlewares/authMiddleware";
 
 const router = Router();
 
 router.get("/", getCategories);
-router.get("/:id", isUuidValid, getCategoryById);
+router.get("/:id", verifyToken, isUuidValid, getCategoryById);
 router.post(
   "/",
+  verifyToken,
   upload.single("imageUrl"),
   validateDTO(CreateCategoryDTO),
   createCategory
 );
 router.patch(
   "/:id",
+  verifyToken,
   isUuidValid,
   validateDTO(UpdateCategoryDTO),
   updateCategory
 );
-router.delete("/:id", isUuidValid, deleteCategory);
+router.delete("/:id", verifyToken, isUuidValid, deleteCategory);
 
 export default router;
