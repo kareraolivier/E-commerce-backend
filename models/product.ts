@@ -43,7 +43,14 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       },
       description: DataTypes.STRING,
       price: DataTypes.STRING,
-      categoryId: DataTypes.STRING,
+      categoryId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "Category",
+          key: "id",
+        },
+      },
       isDeleted: DataTypes.BOOLEAN,
       isAvailable: DataTypes.STRING,
     },

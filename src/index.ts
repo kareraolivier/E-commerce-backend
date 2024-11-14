@@ -6,12 +6,22 @@ import dotenv from "dotenv";
 import { errorHandler } from "./middlewares/errorHandler";
 import path from "path";
 import fs from "fs";
+import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
 
+const PORT = process.env.PORT || 8000;
 dotenv.config();
 const app = express();
 
-const PORT = process.env.PORT || 8000;
+// Socket.io
+const server = http.createServer(app);
+const io = new Server(server);
+io.on("connection", (socket: any) => {
+  console.log("Socket connected");
+});
 
+// sequelize connection
 db.sequelize
   .authenticate()
   .then(() => {
@@ -31,15 +41,7 @@ db.sequelize
   });
 
 // Enable CORS
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
+app.use(cors());
 
 // Logging with morgan
 app.use(morgan("dev"));

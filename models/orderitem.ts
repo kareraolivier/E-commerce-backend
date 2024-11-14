@@ -5,6 +5,7 @@ export class Orderitem extends Model {
   public id!: string;
   public quantity!: number;
   public productId!: string;
+  public orderId!: string;
   /**
    * Helper method for defining associations.
    * This method is not a part of Sequelize lifecycle.
@@ -31,6 +32,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       quantity: DataTypes.STRING,
       productId: DataTypes.STRING,
+      orderId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "Order",
+          key: "id",
+        },
+      },
     },
     {
       sequelize,
