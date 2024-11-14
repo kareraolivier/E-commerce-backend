@@ -10,14 +10,14 @@ export class Order extends Model {
    * This method is not a part of Sequelize lifecycle.
    * The `models/index` file will call this method automatically.
    */
-  static associate(models) {
+  static associate(models: any) {
     Order.hasMany(models.OrderItem, {
       foreignKey: "orderId",
       as: "orderItems",
     });
   }
 }
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize: any, DataTypes: any) => {
   Order.init(
     {
       id: {

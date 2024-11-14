@@ -4,6 +4,7 @@ import { ConflictError, NotFoundError } from "../../errors/AppErrors";
 import { CategoryRepository } from "../../repository/category/category.repository";
 import { ICategory } from "./category";
 
+const categoryRepository = new CategoryRepository(db.sequelize);
 class CategoryService {
   private categoryRepository: CategoryRepository;
   constructor(categoryRepository: CategoryRepository) {
@@ -53,5 +54,4 @@ class CategoryService {
   }
 }
 
-const categoryRepository = new CategoryRepository(db.sequelize);
 export const categoryService = new CategoryService(categoryRepository);
