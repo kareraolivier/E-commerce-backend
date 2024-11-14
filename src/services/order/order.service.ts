@@ -1,4 +1,3 @@
-import { or } from "sequelize";
 import db from "../../../models";
 import { Order } from "../../../models/order";
 import { NotFoundError } from "../../errors/AppErrors";
