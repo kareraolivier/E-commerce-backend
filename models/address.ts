@@ -8,6 +8,7 @@ export class Address extends Model {
   public state!: string;
   public zipCode!: string;
   public country!: string;
+  userId!: string;
   /**
    * Helper method for defining associations.
    * This method is not a part of Sequelize lifecycle.
@@ -30,6 +31,14 @@ module.exports = (sequelize, DataTypes) => {
       state: DataTypes.STRING,
       city: DataTypes.STRING,
       street: DataTypes.STRING,
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "User",
+          key: "id",
+        },
+      },
     },
     {
       sequelize,

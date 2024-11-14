@@ -31,7 +31,14 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       productId: DataTypes.STRING,
-      userId: DataTypes.STRING,
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "User",
+          key: "id",
+        },
+      },
       rating: DataTypes.INTEGER,
       comment: DataTypes.STRING,
       isDeleted: DataTypes.BOOLEAN,
