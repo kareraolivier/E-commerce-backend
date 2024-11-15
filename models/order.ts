@@ -5,6 +5,7 @@ export class Order extends Model {
   public date!: string;
   public totalAmount!: string;
   public status!: string;
+  public userId!: string;
   /**
    * Helper method for defining associations.
    * This method is not a part of Sequelize lifecycle.
@@ -28,6 +29,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
       date: DataTypes.STRING,
       totalAmount: DataTypes.STRING,
       status: DataTypes.STRING,
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "User",
+          key: "id",
+        },
+      },
     },
     {
       sequelize,

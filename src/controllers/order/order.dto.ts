@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
 export class CreateOrderDTO {
   @IsString()
@@ -10,6 +10,10 @@ export class CreateOrderDTO {
   @IsString()
   @IsNotEmpty()
   status!: number;
+  @IsString()
+  @IsNotEmpty()
+  @IsUUID()
+  userId!: string;
 }
 
 export class UpdateOrderDTO {

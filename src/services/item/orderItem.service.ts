@@ -2,6 +2,8 @@ import db from "../../../models";
 import { Orderitem } from "../../../models/orderitem";
 import { NotFoundError } from "../../errors/AppErrors";
 import { OrderItemRepository } from "../../repository/item/orderItem.repository";
+import { orderService } from "../order/order.service";
+import { productService } from "../product/product.service";
 
 const orderItemRepository = new OrderItemRepository(db.sequelize);
 
@@ -11,7 +13,9 @@ export class OrderItemService {
   constructor(orderItemRepository: OrderItemRepository) {
     this.orderItemRepository = orderItemRepository;
   }
-  async createOrderItem(orderItemData: Partial<Orderitem>): Promise<Orderitem> {
+  async createOrderItem(orderItemData: Orderitem): Promise<Orderitem> {
+    await orderService.getOrderById(orderItemData.orderId);
+    await productService.getProductById(orderItemData.productId);
     return orderItemRepository.createOrderItem(orderItemData);
   }
   async getAllOrderItems(): Promise<Orderitem[]> {

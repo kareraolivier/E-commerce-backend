@@ -2,6 +2,7 @@ import db from "../../../models";
 import { Order } from "../../../models/order";
 import { NotFoundError } from "../../errors/AppErrors";
 import { OrderRepository } from "../../repository/order/order.repository";
+import { userService } from "../users/user.service";
 import { IOrder } from "./order";
 
 const orderRepository = new OrderRepository(db.sequelize);
@@ -25,7 +26,8 @@ export class OrderService {
     return order;
   }
 
-  async createOrder(orderData: Partial<Order>): Promise<Order> {
+  async createOrder(orderData: Order): Promise<Order> {
+    await userService.getUserById(orderData.userId);
     const order = await orderRepository.createOrder(orderData);
     return order;
   }

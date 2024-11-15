@@ -1,4 +1,4 @@
-import { IsOptional, IsString, Length } from "class-validator";
+import { IsOptional, IsString, IsUUID, Length } from "class-validator";
 
 export class createProductDto {
   @IsString()
@@ -10,6 +10,7 @@ export class createProductDto {
   @Length(2, 30)
   price!: number;
   @IsString()
+  @IsUUID()
   categoryId!: number;
   @IsString()
   @IsOptional()
@@ -30,6 +31,7 @@ export class updateProductDto {
   price?: number;
   @IsString()
   @IsOptional()
+  @IsUUID()
   categoryId?: number;
   @IsString()
   @IsOptional()
