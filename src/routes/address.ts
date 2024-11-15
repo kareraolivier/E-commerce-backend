@@ -16,10 +16,9 @@ import { isUuidValid } from "../middlewares/isUuidValid";
 import verifyToken from "../middlewares/authMiddleware";
 
 const router = Router();
-
-router.get("/", verifyToken, getAllAddresses);
-router.get("/:id", verifyToken, isUuidValid, getAddressById);
-router.get("/user/:id", verifyToken, isUuidValid, getAddressByUserId);
+router.get("/", getAllAddresses);
+router.get("/:id", isUuidValid, getAddressById);
+router.get("/user/:id", isUuidValid, getAddressByUserId);
 router.post("/", validateDTO(CreateAddressDTO), createAddress);
 router.patch("/:id", isUuidValid, validateDTO(UpdateAddressDTO), updateAddress);
 router.delete("/:id", verifyToken, isUuidValid, deleteAddress);

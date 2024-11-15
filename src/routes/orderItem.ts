@@ -16,9 +16,9 @@ import verifyToken from "../middlewares/authMiddleware";
 
 const router = Router();
 
-router.get("/", verifyToken, getAllOrderItems);
-router.get("/:id", verifyToken, isUuidValid, getOrderItemById);
-router.post("/", verifyToken, validateDTO(CreateOrderItemDTO), createOrderItem);
+router.get("/", getAllOrderItems);
+router.get("/:id", isUuidValid, getOrderItemById);
+router.post("/", validateDTO(CreateOrderItemDTO), createOrderItem);
 router.patch(
   "/:id",
   verifyToken,
