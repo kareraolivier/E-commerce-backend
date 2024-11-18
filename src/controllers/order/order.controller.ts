@@ -42,6 +42,20 @@ export const createOrder = async (
   }
 };
 
+export const createCheckoutOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderData: any = req.body;
+    const newOrder = await orderService.createCheckoutOrder(orderData);
+    res.status(201).json(newOrder);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateOrder = async (
   req: Request,
   res: Response,

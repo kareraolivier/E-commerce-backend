@@ -32,11 +32,13 @@ export class OrderRepository {
   async createOrder(orderData: Partial<Order>): Promise<Order> {
     const id = uuidv4();
     const order = await this.sequelize.query(
-      'INSERT INTO "Orders" ("id", "userId", "totalAmount", "status", "createdAt", "updatedAt") VALUES (:id, :userId, :totalAmount, :status, :createdAt, :updatedAt) RETURNING *',
+      'INSERT INTO "Orders" ("id", "userId", "date", "totalAmount", "status", "createdAt", "updatedAt") VALUES (:id, :userId, :date, :totalAmount, :status, :createdAt, :updatedAt) RETURNING *',
       {
         replacements: {
           id,
           ...orderData,
+          date: orderData.date || new Date().toISOString(),
+          status: orderData.status || "pending",
           createdAt: new Date(),
           updatedAt: new Date(),
         },

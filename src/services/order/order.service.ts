@@ -1,9 +1,11 @@
 import db from "../../../models";
 import { Order } from "../../../models/order";
+import { Orderitem } from "../../../models/orderitem";
 import { NotFoundError } from "../../errors/AppErrors";
 import { OrderRepository } from "../../repository/order/order.repository";
+import { orderItemService } from "../item/orderItem.service";
 import { userService } from "../users/user.service";
-import { IOrder } from "./order";
+import { ICheckoutOrder, IOrderItem } from "./order";
 
 const orderRepository = new OrderRepository(db.sequelize);
 export class OrderService {
@@ -29,6 +31,22 @@ export class OrderService {
   async createOrder(orderData: Order): Promise<Order> {
     await userService.getUserById(orderData.userId);
     const order = await orderRepository.createOrder(orderData);
+    return order;
+  }
+  async createCheckoutOrder(orderData: ICheckoutOrder): Promise<Order> {
+    await userService.getUserById(orderData.userId);
+
+    const { items, ...newOrderData } = orderData;
+    const order = await orderRepository.createOrder(newOrderData);
+
+    await Promise.all(
+      items.map((item: Omit<IOrderItem, "orderId">) =>
+        orderItemService.createOrderItem({
+          ...item,
+          orderId: Array.isArray(order) ? order[0].id : order.id,
+        } as Orderitem)
+      )
+    );
     return order;
   }
 

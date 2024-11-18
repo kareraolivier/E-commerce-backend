@@ -9,7 +9,7 @@ export const login = async (
   try {
     const { email, password } = req.body;
     const user = await userAuthService.login(email, password);
-    res.status(200).json({ user });
+    res.status(200).json({ userToken: user });
   } catch (error) {
     next(error);
   }

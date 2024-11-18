@@ -3,13 +3,13 @@ import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 export class CreateOrderDTO {
   @IsString()
   @IsNotEmpty()
-  date!: number;
+  date!: Date;
   @IsString()
   @IsNotEmpty()
-  totalAmount!: number;
+  totalAmount!: string;
   @IsString()
   @IsNotEmpty()
-  status!: number;
+  status!: string;
   @IsString()
   @IsNotEmpty()
   @IsUUID()
@@ -19,7 +19,7 @@ export class CreateOrderDTO {
 export class UpdateOrderDTO {
   @IsString()
   @IsNotEmpty()
-  date?: number;
+  date?: Date;
   @IsString()
   @IsNotEmpty()
   totalAmount?: number;
