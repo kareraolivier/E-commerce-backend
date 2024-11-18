@@ -30,7 +30,7 @@ export class OrderItemRepository {
   async createOrderItem(orderItemData: Partial<Orderitem>): Promise<Orderitem> {
     const id = uuidv4();
     const [orderItem] = await this.sequelize.query(
-      'INSERT INTO "Orderitems" ("id", "orderId", "productId", "quantity", "createdAt", "updatedAt") VALUES (:id, :orderId, :productId, :quantity, :createdAt, :updatedAt) RETURNING *;',
+      'INSERT INTO "Orderitems" ("id", "orderId", "productId", "quantity", "amount", "createdAt", "updatedAt") VALUES (:id, :orderId, :productId, :quantity, :amount, :createdAt, :updatedAt) RETURNING *;',
       {
         replacements: {
           id,

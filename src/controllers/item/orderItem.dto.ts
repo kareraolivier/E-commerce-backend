@@ -9,6 +9,8 @@ export class CreateOrderItemDTO {
   @IsString()
   @IsUUID()
   orderId!: string;
+  @IsString()
+  amount!: string;
 }
 
 export class UpdateOrderItemDTO {
@@ -20,6 +22,8 @@ export class UpdateOrderItemDTO {
   @IsString()
   @IsUUID()
   orderId?: string;
+  @IsString()
+  amount?: string;
 }
 
 export class DeleteOrderItemDTO {
