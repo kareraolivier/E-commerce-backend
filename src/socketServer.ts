@@ -5,7 +5,6 @@ let io: Server | null = null;
 
 // Function to initialize the Socket.IO server
 export const initializeSocketServer = (server: http.Server) => {
-  console.log("server,,,,,,,,,,,,,,,,,,,", server);
   io = new Server(server, {
     cors: {
       origin: "*",
