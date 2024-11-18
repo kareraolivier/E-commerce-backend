@@ -12,6 +12,7 @@ export type IOrderItem = {
   orderId: string;
   productId: string;
   quantity: number;
+  amount: string;
 };
 
 export type ICheckoutOrder = {

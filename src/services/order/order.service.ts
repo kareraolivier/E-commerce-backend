@@ -1,7 +1,7 @@
 import db from "../../../models";
 import { Order } from "../../../models/order";
 import { Orderitem } from "../../../models/orderitem";
-import { NotFoundError } from "../../errors/AppErrors";
+import { BadRequestError, NotFoundError } from "../../errors/AppErrors";
 import { OrderRepository } from "../../repository/order/order.repository";
 import { getIO } from "../../socketServer";
 import { orderItemService } from "../item/orderItem.service";
@@ -43,6 +43,14 @@ export class OrderService {
       await userService.getUserById(orderData.userId);
 
       const { items, ...newOrderData } = orderData;
+
+      const total = items.reduce((acc, item) => acc + Number(item.amount), 0);
+      if (!(Number(newOrderData.totalAmount) === total)) {
+        throw new BadRequestError(
+          "Total amount does not match order items total"
+        );
+      }
+
       const order = await orderRepository.createOrder(newOrderData);
       await Promise.all(
         items.map((item: Omit<IOrderItem, "orderId">) =>
