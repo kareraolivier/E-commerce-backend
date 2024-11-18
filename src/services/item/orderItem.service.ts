@@ -32,9 +32,18 @@ export class OrderItemService {
     id: string,
     orderItemData: Partial<Orderitem>
   ): Promise<Orderitem> {
-    await this.getOrderItemById(id);
-    return orderItemRepository.updateOrderItem(id, orderItemData);
+    const transaction = await db.sequelize.transaction();
+    try {
+      await this.getOrderItemById(id);
+      const item = orderItemRepository.updateOrderItem(id, orderItemData);
+      await transaction.commit();
+      return item;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
   }
+
   async deleteOrderItem(id: string): Promise<void> {
     return orderItemRepository.deleteOrderItem(id);
   }

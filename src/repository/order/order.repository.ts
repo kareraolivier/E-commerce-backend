@@ -1,5 +1,5 @@
 import { Order } from "../../../models/order";
-import { Sequelize, QueryTypes } from "sequelize";
+import { Sequelize, QueryTypes, Transaction } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
 import { updateRecord } from "../../helpers/update.query";
 
@@ -29,7 +29,10 @@ export class OrderRepository {
     return (order[0] as Order) || null;
   }
 
-  async createOrder(orderData: Partial<Order>): Promise<Order> {
+  async createOrder(
+    orderData: Partial<Order>,
+    transaction?: Transaction
+  ): Promise<Order> {
     const id = uuidv4();
     const order = await this.sequelize.query(
       'INSERT INTO "Orders" ("id", "userId", "date", "totalAmount", "status", "createdAt", "updatedAt") VALUES (:id, :userId, :date, :totalAmount, :status, :createdAt, :updatedAt) RETURNING *',
@@ -43,13 +46,25 @@ export class OrderRepository {
           updatedAt: new Date(),
         },
         type: QueryTypes.INSERT,
+        transaction,
       }
     );
     return order[0] as unknown as Order;
   }
 
-  async updateOrder(id: string, orderData: Partial<Order>) {
-    await updateRecord(this.sequelize, "Orders", id, orderData);
+  async updateOrder(
+    id: string,
+    orderData: Partial<Order>,
+    transaction?: Transaction
+  ) {
+    const order = await updateRecord(
+      this.sequelize,
+      "Orders",
+      id,
+      orderData,
+      transaction
+    );
+    return order as Order;
   }
 
   async deleteOrder(id: string): Promise<void> {

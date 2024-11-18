@@ -1,4 +1,4 @@
-import { Sequelize, QueryTypes } from "sequelize";
+import { Sequelize, QueryTypes, Transaction } from "sequelize";
 
 /**
  * Helper function to dynamically update a record in any table.
@@ -12,7 +12,8 @@ export async function updateRecord<T>(
   sequelize: Sequelize,
   tableName: string,
   id: string,
-  data: Partial<T>
+  data: Partial<T>,
+  transaction?: Transaction
 ): Promise<Partial<T> | null> {
   // Filter out undefined fields
   const fieldsToUpdate = Object.entries(data)
@@ -35,6 +36,7 @@ export async function updateRecord<T>(
       updatedAt: new Date(),
     },
     type: QueryTypes.UPDATE,
+    transaction,
   });
 
   return result ? (result as Partial<T>) : null;

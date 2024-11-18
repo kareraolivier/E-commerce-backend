@@ -1,5 +1,5 @@
 import { Orderitem } from "../../../models/orderitem";
-import { Sequelize, QueryTypes } from "sequelize";
+import { Sequelize, QueryTypes, Transaction } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
 import { updateRecord } from "../../helpers/update.query";
 
@@ -27,7 +27,10 @@ export class OrderItemRepository {
     return (orderItem[0] as Orderitem) || null;
   }
 
-  async createOrderItem(orderItemData: Partial<Orderitem>): Promise<Orderitem> {
+  async createOrderItem(
+    orderItemData: Partial<Orderitem>,
+    transaction?: Transaction
+  ): Promise<Orderitem> {
     const id = uuidv4();
     const [orderItem] = await this.sequelize.query(
       'INSERT INTO "Orderitems" ("id", "orderId", "productId", "quantity", "createdAt", "updatedAt") VALUES (:id, :orderId, :productId, :quantity, :createdAt, :updatedAt) RETURNING *;',
@@ -39,6 +42,7 @@ export class OrderItemRepository {
           updatedAt: new Date(),
         },
         type: QueryTypes.INSERT,
+        transaction,
       }
     );
     return orderItem as unknown as Orderitem;
@@ -46,15 +50,17 @@ export class OrderItemRepository {
 
   async updateOrderItem(
     id: string,
-    orderItemData: Partial<Orderitem>
+    orderItemData: Partial<Orderitem>,
+    transaction?: Transaction
   ): Promise<Orderitem> {
     const updatedOrderItem = await updateRecord<Orderitem>(
       this.sequelize,
       "Orderitems",
       id,
-      orderItemData
+      orderItemData,
+      transaction
     );
-    return updatedOrderItem as unknown as Orderitem;
+    return updatedOrderItem as Orderitem;
   }
 
   async deleteOrderItem(id: string): Promise<void> {
