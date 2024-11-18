@@ -1,2 +1,2 @@
-# Handle line endings
-* text=auto
+# Force LF line endings for all text files
+* text=auto eol=lf
