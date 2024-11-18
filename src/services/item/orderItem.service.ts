@@ -32,14 +32,12 @@ export class OrderItemService {
     id: string,
     orderItemData: Partial<Orderitem>
   ): Promise<Orderitem> {
-    const transaction = await db.sequelize.transaction();
     try {
       await this.getOrderItemById(id);
       const item = orderItemRepository.updateOrderItem(id, orderItemData);
-      await transaction.commit();
+
       return item;
     } catch (error) {
-      await transaction.rollback();
       throw error;
     }
   }

@@ -3,6 +3,7 @@ import { Order } from "../../../models/order";
 import { Orderitem } from "../../../models/orderitem";
 import { NotFoundError } from "../../errors/AppErrors";
 import { OrderRepository } from "../../repository/order/order.repository";
+import { getIO } from "../../socketServer";
 import { orderItemService } from "../item/orderItem.service";
 import { userService } from "../users/user.service";
 import { ICheckoutOrder, IOrderItem } from "./order";
@@ -29,60 +30,47 @@ export class OrderService {
   }
 
   async createOrder(orderData: Order): Promise<Order> {
-    const transaction = await db.sequelize.transaction();
     try {
       await userService.getUserById(orderData.userId);
-      const order = await orderRepository.createOrder(orderData, transaction);
-      await transaction.commit();
+      const order = await orderRepository.createOrder(orderData);
       return order;
     } catch (error) {
-      await transaction.rollback();
       throw error;
     }
   }
   async createCheckoutOrder(orderData: ICheckoutOrder): Promise<Order> {
-    const transaction = await db.sequelize.transaction();
     try {
       await userService.getUserById(orderData.userId);
 
       const { items, ...newOrderData } = orderData;
-      const order = await orderRepository.createOrder(
-        newOrderData,
-        transaction
-      );
-
+      const order = await orderRepository.createOrder(newOrderData);
       await Promise.all(
-        items.map(
-          (item: Omit<IOrderItem, "orderId">) =>
-            orderItemService.createOrderItem({
-              ...item,
-              orderId: Array.isArray(order) ? order[0].id : order.id,
-            } as Orderitem),
-          transaction
+        items.map((item: Omit<IOrderItem, "orderId">) =>
+          orderItemService.createOrderItem({
+            ...item,
+            orderId: Array.isArray(order) ? order[0].id : order.id,
+          } as Orderitem)
         )
       );
 
-      await transaction.commit();
+      // const io = getIO();
+      // io.emit("orderCreated", {
+      //   message: "A new order has been created!",
+      //   order,
+      // });
+
       return order;
     } catch (error) {
-      await transaction.rollback();
       throw error;
     }
   }
 
   async updateOrder(id: string, orderData: Partial<Order>): Promise<Order> {
-    const transaction = await db.sequelize.transaction();
     try {
       await this.getOrderById(id);
-      const order = await orderRepository.updateOrder(
-        id,
-        orderData,
-        transaction
-      );
-      await transaction.commit();
+      const order = await orderRepository.updateOrder(id, orderData);
       return order;
     } catch (error) {
-      await transaction.rollback();
       throw error;
     }
   }

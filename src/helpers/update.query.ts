@@ -12,8 +12,7 @@ export async function updateRecord<T>(
   sequelize: Sequelize,
   tableName: string,
   id: string,
-  data: Partial<T>,
-  transaction?: Transaction
+  data: Partial<T>
 ): Promise<Partial<T> | null> {
   // Filter out undefined fields
   const fieldsToUpdate = Object.entries(data)
@@ -36,7 +35,6 @@ export async function updateRecord<T>(
       updatedAt: new Date(),
     },
     type: QueryTypes.UPDATE,
-    transaction,
   });
 
   return result ? (result as Partial<T>) : null;

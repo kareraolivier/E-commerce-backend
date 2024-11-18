@@ -9,20 +9,11 @@ import fs from "fs";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
+import { initializeSocketServer } from "./socketServer";
 
 const PORT = process.env.PORT || 8000;
 dotenv.config();
 const app = express();
-
-// Socket.io
-const server = http.createServer(app);
-const io = new Server(server);
-io.on("connection", (socket: any) => {
-  console.log("User connected", socket.id);
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
-});
 
 // sequelize connection
 db.sequelize
@@ -42,6 +33,10 @@ db.sequelize
   .catch((error: any) => {
     console.error("Unable to connect to the database with Sequelize:", error);
   });
+
+// Socket.io
+const server = http.createServer(app);
+initializeSocketServer(server);
 
 // Enable CORS
 app.use(cors());
@@ -81,4 +76,9 @@ app.use(errorHandler);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT} 🔥`);
+});
+
+// Add this at the end of the file
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
 });

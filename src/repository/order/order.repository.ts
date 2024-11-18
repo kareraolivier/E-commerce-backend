@@ -29,10 +29,7 @@ export class OrderRepository {
     return (order[0] as Order) || null;
   }
 
-  async createOrder(
-    orderData: Partial<Order>,
-    transaction?: Transaction
-  ): Promise<Order> {
+  async createOrder(orderData: Partial<Order>): Promise<Order> {
     const id = uuidv4();
     const order = await this.sequelize.query(
       'INSERT INTO "Orders" ("id", "userId", "date", "totalAmount", "status", "createdAt", "updatedAt") VALUES (:id, :userId, :date, :totalAmount, :status, :createdAt, :updatedAt) RETURNING *',
@@ -46,24 +43,13 @@ export class OrderRepository {
           updatedAt: new Date(),
         },
         type: QueryTypes.INSERT,
-        transaction,
       }
     );
     return order[0] as unknown as Order;
   }
 
-  async updateOrder(
-    id: string,
-    orderData: Partial<Order>,
-    transaction?: Transaction
-  ) {
-    const order = await updateRecord(
-      this.sequelize,
-      "Orders",
-      id,
-      orderData,
-      transaction
-    );
+  async updateOrder(id: string, orderData: Partial<Order>) {
+    const order = await updateRecord(this.sequelize, "Orders", id, orderData);
     return order as Order;
   }
 
