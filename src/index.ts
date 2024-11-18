@@ -8,7 +8,6 @@ import path from "path";
 import fs from "fs";
 import cors from "cors";
 import http from "http";
-import { Server } from "socket.io";
 import { initializeSocketServer } from "./socketServer";
 
 const PORT = process.env.PORT || 8000;
@@ -35,7 +34,7 @@ db.sequelize
   });
 
 // Socket.io
-const server = http.createServer(app);
+const server: http.Server = http.createServer(app);
 initializeSocketServer(server);
 
 // Enable CORS
