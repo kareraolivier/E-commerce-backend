@@ -5,7 +5,13 @@ let io: Server | null = null;
 
 // Function to initialize the Socket.IO server
 export const initializeSocketServer = (server: http.Server) => {
-  io = new Server(server);
+  console.log("server,,,,,,,,,,,,,,,,,,,", server);
+  io = new Server(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  });
 
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
