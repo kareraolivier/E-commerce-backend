@@ -15,7 +15,7 @@ export class Review extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models: any) {
-    Review.belongsTo(models.User, { foreignKey: "userId", as: "user" });
+    Review.belongsTo(models.User, { foreignKey: "userId", as: "users" });
     Review.belongsTo(models.Product, {
       foreignKey: "productId",
       as: "product",
@@ -35,7 +35,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "User",
+          model: "Users",
           key: "id",
         },
       },

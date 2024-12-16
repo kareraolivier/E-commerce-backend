@@ -9,10 +9,15 @@ import fs from "fs";
 import cors from "cors";
 import http from "http";
 import { initializeSocketServer } from "./socketServer";
+import { Server } from "socket.io";
 
 const PORT = process.env.PORT || 8000;
 dotenv.config();
 const app = express();
+
+// Socket.io
+const server = http.createServer(app);
+// initializeSocketServer(server);
 
 // sequelize connection
 db.sequelize
@@ -32,10 +37,6 @@ db.sequelize
   .catch((error: any) => {
     console.error("Unable to connect to the database with Sequelize:", error);
   });
-
-// Socket.io
-const server: http.Server = http.createServer(app);
-initializeSocketServer(server);
 
 // Enable CORS
 app.use(cors());
@@ -70,11 +71,38 @@ app.get("/", (_, res) => {
 // Error handling middleware
 app.use(errorHandler);
 
-// Routes
-
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT} 🔥`);
+});
+
+// const io = socketIO(app);
+
+// io.on("connection", () => {
+//   console.log("User connected 🔥");
+//   io.emit("msg", "hello it is done");
+//   // socket.on("disconnect", () => {
+//   //   console.log("User disconnected:", socket.id);
+//   // });
+// });
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+  },
+});
+io.on("connection", (socket) => {
+  console.log(`socket ${socket.id} connected`);
+  // send an event to the client
+  socket.emit("msg", "bar");
+  socket.on("foobar", () => {
+    // an event was received from the client
+  });
+  // upon disconnection
+  socket.on("disconnect", (reason) => {
+    console.log(`socket ${socket.id} disconnected due to ${reason}`);
+  });
 });
 
 // Add this at the end of the file

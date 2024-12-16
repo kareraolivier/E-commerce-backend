@@ -15,7 +15,7 @@ export class Address extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models: any) {
-    Address.belongsTo(models.User, { foreignKey: "userId", as: "user" });
+    Address.belongsTo(models.User, { foreignKey: "userId", as: "users" });
   }
 }
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -35,7 +35,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "User",
+          model: "Users",
           key: "id",
         },
       },

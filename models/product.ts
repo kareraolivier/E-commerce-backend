@@ -47,7 +47,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "Category",
+          model: "Categories",
           key: "id",
         },
       },

@@ -12,7 +12,7 @@ export class Order extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models: any) {
-    Order.hasMany(models.OrderItem, {
+    Order.hasMany(models.Orderitem, {
       foreignKey: "orderId",
       as: "orderItems",
     });
@@ -33,7 +33,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "User",
+          model: "Users",
           key: "id",
         },
       },
