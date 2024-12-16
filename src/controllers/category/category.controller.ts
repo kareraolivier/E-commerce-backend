@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { categoryService } from "../../services/category/category.service";
+import exp from "constants";
 
 export const getCategories = async (
   req: Request,
@@ -56,6 +57,20 @@ export const updateCategory = async (
       categoryData
     );
     res.status(200).json(updatedCategory);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const softDeleteCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    await categoryService.softDeleteCategory(id);
+    res.status(200).json({ message: "Category deleted successfully" });
   } catch (error) {
     next(error);
   }

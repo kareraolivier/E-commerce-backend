@@ -10,7 +10,7 @@ export class CategoryRepository {
   }
   async fetchAllCategories(): Promise<Category[]> {
     const categories = await this.sequelize.query(
-      'SELECT * FROM "Categories" ORDER BY id desc',
+      'SELECT * FROM "Categories" WHERE "isDeleted"=false ORDER BY id desc',
       {
         type: QueryTypes.SELECT,
       }
@@ -66,6 +66,16 @@ export class CategoryRepository {
       "Categories",
       id,
       categoryData
+    );
+  }
+
+  async softDeleteCategory(id: string): Promise<void> {
+    await this.sequelize.query(
+      'UPDATE "Categories" SET "isDeleted" = true WHERE "id" = :id',
+      {
+        replacements: { id },
+        type: QueryTypes.UPDATE,
+      }
     );
   }
 

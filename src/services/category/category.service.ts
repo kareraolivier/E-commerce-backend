@@ -48,6 +48,12 @@ class CategoryService {
     );
     return category as Category;
   }
+
+  async softDeleteCategory(id: string): Promise<void> {
+    await this.getCategoryById(id);
+    await this.categoryRepository.softDeleteCategory(id);
+  }
+
   async deleteCategory(id: string): Promise<void> {
     await this.getCategoryById(id);
     await this.categoryRepository.deleteCategory(id);

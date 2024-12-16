@@ -5,6 +5,7 @@ import {
   getCategoryById,
   updateCategory,
   deleteCategory,
+  softDeleteCategory,
 } from "../controllers/category/category.controller";
 import {
   CreateCategoryDTO,
@@ -33,6 +34,7 @@ router.patch(
   validateDTO(UpdateCategoryDTO),
   updateCategory
 );
+router.patch("/delete/:id", verifyToken, isUuidValid, softDeleteCategory);
 router.delete("/:id", verifyToken, isUuidValid, deleteCategory);
 
 export default router;
