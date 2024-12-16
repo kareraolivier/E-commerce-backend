@@ -1,7 +1,7 @@
 import { Sequelize, QueryTypes, Transaction } from "sequelize";
 
 /**
- * Helper function to dynamically update a record in any table.
+ * Helper function to dynamically update a record query in any table.
  * @param sequelize - Sequelize instance
  * @param tableName - Name of the table
  * @param id - ID of the record to update
@@ -24,8 +24,8 @@ export async function updateRecord<T>(
   }
 
   // Construct the SET clause
-  const setClause = fieldsToUpdate.join(", ");
-  const query = `UPDATE "${tableName}" SET ${setClause}, "updatedAt" = :updatedAt WHERE "id" = :id RETURNING *`;
+  const joinedQuery = fieldsToUpdate.join(", ");
+  const query = `UPDATE "${tableName}" SET ${joinedQuery}, "updatedAt" = :updatedAt WHERE "id" = :id RETURNING *`;
 
   // Execute the query with replacements
   const [result] = await sequelize.query(query, {
