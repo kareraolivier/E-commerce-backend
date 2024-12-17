@@ -1,30 +1,30 @@
 const socketIO = require("socket.io");
-import http from "http";
 
 let io: any = null;
 
 // Function to initialize the Socket.IO server
-
 export const initializeSocketServer = (server: any) => {
-  // io = new Server(server, {
-  //   cors: {
-  //     origin: "*",
-  //     methods: ["GET", "POST", "PATCH", "DELETE"],
-  //   },
-  //   transports: ["websocket"],
-  // });
-
-  io = socketIO(server);
-
-  io.on("connection", () => {
-    console.log("User connected:");
-    io.emit("msg", "hello it is done");
-    // socket.on("disconnect", () => {
-    //   console.log("User disconnected:", socket.id);
-    // });
+  const io = socketIO(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST", "PATCH", "DELETE"],
+    },
   });
+  io.on("connection", (socket: any) => {
+    console.log(`User connected: ${socket.id} 🔥`);
 
-  console.log("Socket.IO server initialized");
+    // Send a message to the client
+    socket.emit("msg", "Socket.IO connection established!");
+
+    // Handle client events
+    socket.on("clientEvent", (data: any) => {
+      console.log("Data received from client:", data);
+    });
+
+    socket.on("disconnect", (reason: any) => {
+      console.log(`User disconnected: ${socket.id}, Reason: ${reason}`);
+    });
+  });
 };
 // Function to emit events from anywhere in the app
 export const getIO = () => {
