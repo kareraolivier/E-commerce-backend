@@ -30,7 +30,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: uuidv4,
         primaryKey: true,
       },
-      productId: DataTypes.STRING,
+      productId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "Products",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+
       userId: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -38,6 +48,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
           model: "Users",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       rating: DataTypes.INTEGER,
       comment: DataTypes.STRING,

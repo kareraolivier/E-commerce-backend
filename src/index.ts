@@ -30,7 +30,7 @@ db.sequelize
   });
 
 db.sequelize
-  .sync({ alter: true })
+  .sync({ force: true })
   .then(() => {
     console.log("Sequelize connected to the database");
   })

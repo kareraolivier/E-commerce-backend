@@ -32,7 +32,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
         primaryKey: true,
       },
       quantity: DataTypes.STRING,
-      productId: DataTypes.STRING,
+      productId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "Products",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+
       orderId: {
         type: DataTypes.UUID,
         allowNull: false,
