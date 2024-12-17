@@ -4,7 +4,7 @@ let io: any = null;
 
 // Function to initialize the Socket.IO server
 export const initializeSocketServer = (server: any) => {
-  const io = socketIO(server, {
+  io = socketIO(server, {
     cors: {
       origin: "*",
       methods: ["GET", "POST", "PATCH", "DELETE"],
@@ -15,11 +15,6 @@ export const initializeSocketServer = (server: any) => {
 
     // Send a message to the client
     socket.emit("msg", "Socket.IO connection established!");
-
-    // Handle client events
-    socket.on("clientEvent", (data: any) => {
-      console.log("Data received from client:", data);
-    });
 
     socket.on("disconnect", (reason: any) => {
       console.log(`User disconnected: ${socket.id}, Reason: ${reason}`);

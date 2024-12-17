@@ -33,6 +33,7 @@ export class OrderService {
     try {
       await userService.getUserById(orderData.userId);
       const order = await orderRepository.createOrder(orderData);
+
       return order;
     } catch (error) {
       throw error;
@@ -62,6 +63,7 @@ export class OrderService {
       );
 
       // --------------------socket message----------------------
+      // Emit socket message
       const io = getIO();
       io.emit("orderCreated", {
         message: "A new order has been created!",
