@@ -41,10 +41,10 @@
   },
   "scripts": {
     "watch": "tsc -w",
-    "dev": "nodemon build/index.js",
+    "dev": "node api.js && nodemon build/index.js",
     "start:dev": "concurrently \"tsc -w\" \"nodemon build/index.js\"",
-    "build": "tsc",
-    "start": "ts-node src/index.ts",
+    "build": "node api.js && tsc",
+    "start": "node api.js && ts-node src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
     "migrate:up": "npx sequelize-cli db:migrate --config ./config/config.js",
     "migrate:down": "npx sequelize-cli db:migrate:undo",
