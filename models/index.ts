@@ -1,33 +1,42 @@
 import fs from "fs";
 import path from "path";
 import { Sequelize, DataTypes } from "sequelize";
-import process from "process";
 import dotenv from "dotenv";
-
-const basename = path.basename(__filename);
 
 dotenv.config();
 
+const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 const db: any = {};
 
-const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE } = process.env;
+const { DB_URL } = process.env;
 
-let sequelize = new Sequelize(DB_DATABASE!, DB_USERNAME!, DB_PASSWORD!, {
-  host: DB_HOST,
-  port: parseInt(DB_PORT || "5432"),
+if (!DB_URL) {
+  throw new Error(
+    "Database URL (DB_URL) is not defined in environment variables."
+  );
+}
+
+const sequelize = new Sequelize(DB_URL, {
   dialect: "postgres",
-  logging: false,
+  protocol: "postgres",
+  logging: env === "development",
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
 });
 
 fs.readdirSync(__dirname)
   .filter((file) => {
-    return (
+    const isModelFile =
       file.indexOf(".") !== 0 &&
       file !== basename &&
-      file.slice(-3) === ".ts" &&
-      file.indexOf(".test.js") === -1
-    );
+      (env === "development" ? file.endsWith(".ts") : file.endsWith(".js")) &&
+      !file.includes(".test.js");
+    return isModelFile;
   })
   .forEach((file) => {
     const model = require(path.join(__dirname, file))(sequelize, DataTypes);
